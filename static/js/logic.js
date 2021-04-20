@@ -10,6 +10,17 @@ d3.json(baseURL).then(data => {
   createFeatures(data.features);
 });
 
+function chooseColor(depth){
+  switch (true){
+    case depth < 10: return "#c7ea46";
+    case depth < 30: return "#fce205";
+    case depth < 50: return "#ffbf00";
+    case depth < 70: return "#fda50f";
+    case depth < 90: return "#d21f3c";
+    case depth > 91: return "#800000";
+  };
+}
+
 function createFeatures(earthquakeData) {
 
   // Define a function we want to run once for each feature in the features array
@@ -28,8 +39,12 @@ function createFeatures(earthquakeData) {
       return new L.Circle(latlng, {
         radius: feature.properties.mag*100000,
         // change the fillColor to change with the depth
-        fillColor: "red",
-        stroke: false 
+        // fillColor: "red",
+        fillColor: chooseColor(feature.geometry.coordinates[2]),
+        fillOpacity: 0.7,
+        color: "black",
+        stroke: true,
+        weight: 0.5 
       });
     }
   });
@@ -71,9 +86,28 @@ function createMap(mags) {
     center: [
       37.09, -95.71
     ],
-    zoom: 2,
+    zoom: 3,
     layers: [lightmap, mags]
   });
+
+  const legend = L.control({
+    position: "bottomright"
+  });
+
+  legend.onAdd = function(){
+    var div = L.DomUtil.create("div", "info legend");
+    var grades = ['-9-10','11-30','31-50','51-70','71-90','91+'];
+    var colors = ['#c7ea46','#fce205','#ffbf00','#fda50f','#d21f3c','#800000'];
+
+    for (var i = 0; i<grades.length; i++){
+      div.innerHTML +=
+      '<i style="background:' + colors[i] + '"></i>' + grades[i] + '<br';
+    }
+    return div;
+
+  }
+
+  legend.addTo(myMap)
 
   // Create a layer control
   // Pass in our baseMaps and overlayMaps
