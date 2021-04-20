@@ -76,12 +76,10 @@ function createMap(mags) {
   var faultlineurl = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json";
 
   d3.json(faultlineurl, function(plates){
-    L.geoJSON(plates, {
-      style: function() {
-        return {color:"yellow"}
-      }
-    }).addTo(faultline)
-  })
+    L.geoJSON(plates, {color:"orange",weight: 2})
+    .addTo(faultline);
+    faultline.addTo(myMap);
+  });
 
   // Define a baseMaps object to hold our base layers
   const baseMaps = {
@@ -92,7 +90,7 @@ function createMap(mags) {
   // Create overlay object to hold our overlay layer
   const overlayMaps = {
     "Tectonic Plates": faultline,
-    "Earthquakes": mags
+    Earthquakes: mags
   };
 
   // Create our map, giving it the streetmap and earthquakes layers to display on load
@@ -117,7 +115,7 @@ function createMap(mags) {
 
     for (var i = 0; i < grades.length; i++){
       div.innerHTML +=
-      '<i style="background:' + color[i] + ' "></i>' + '&nbsp;&nbsp;' + grades[i]+ '<\p>';
+      '<i style="background:' + chooseColor(grades[i] +1) + ' "></i>' + '&nbsp;&nbsp;' + grades[i]+ '<br>';
     }
     return div;
 
