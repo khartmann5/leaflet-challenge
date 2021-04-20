@@ -13,21 +13,14 @@ d3.json(baseURL).then(data => {
 function createFeatures(earthquakeData) {
 
   // Define a function we want to run once for each feature in the features array
-  // Give each feature a popup describing the place and time of the earthquake
-  // function onEachFeature(feature, layer) {
-  //   layer.bindPopup("<h3>" + feature.properties.title +
-  //     "</h3><hr><p>" + new Date(feature.properties.time) + "</p>");
-  // }
+  // Give each feature a popup describing the earthquake
 
   function onEachFeature(feature, layer) {
-      layer.bindPopup(`<p> Magnitude: ${feature.properties.mag}</p><p> Depth: ${feature.geometry.coordinates[2]}</p><p> Location: ${feature.properties.place}`);
+      layer.bindPopup(`<p> Magnitude: ${feature.properties.mag}</p><p> Depth: ${feature.geometry.coordinates[2]}</p><p> Location: ${feature.properties.place}</p>`);
     }
 
   // Create a GeoJSON layer containing the features array on the earthquakeData object
   // Run the onEachFeature function once for each piece of data in the array
-  const earthquakes = L.geoJSON(earthquakeData, {
-    onEachFeature: onEachFeature,
-  });
 
   const mags = L.geoJSON(earthquakeData, {
     onEachFeature: onEachFeature,
@@ -42,10 +35,11 @@ function createFeatures(earthquakeData) {
   });
 
   // Sending our earthquakes layer to the createMap function
-  createMap(earthquakes, mags);
+  createMap(mags);
 }
 
-function createMap(earthquakes, mags) {
+// function createMap(earthquakes, mags) {
+function createMap(mags) {  
 
   const lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
@@ -69,7 +63,6 @@ function createMap(earthquakes, mags) {
 
   // Create overlay object to hold our overlay layer
   const overlayMaps = {
-    Earthquakes: earthquakes,
     Magnitudes: mags
   };
 
@@ -79,7 +72,7 @@ function createMap(earthquakes, mags) {
       37.09, -95.71
     ],
     zoom: 2,
-    layers: [lightmap, earthquakes]
+    layers: [lightmap, mags]
   });
 
   // Create a layer control
