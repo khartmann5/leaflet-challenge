@@ -90,18 +90,20 @@ function createMap(mags) {
     layers: [lightmap, mags]
   });
 
-  const legend = L.control({
-    position: "bottomright"
+  // create a legend in the bottom right corner
+  var legend = L.control({
+    position: 'bottomright',
+    fillColor: 'white'
   });
 
   legend.onAdd = function(){
     var div = L.DomUtil.create("div", "info legend");
-    var grades = ['-9-10','11-30','31-50','51-70','71-90','91+'];
-    var colors = ['#c7ea46','#fce205','#ffbf00','#fda50f','#d21f3c','#800000'];
+    var grades = ['<10','11-30','31-50','51-70','71-90','91+'];
+    var color = ['#c7ea46','#fce205','#ffbf00','#fda50f','#d21f3c','#800000'];
 
-    for (var i = 0; i<grades.length; i++){
+    for (var i = 0; i < grades.length; i++){
       div.innerHTML +=
-      '<i style="background:' + colors[i] + '"></i>' + grades[i] + '<br';
+      '<i style="background:' + color[i] + ' "></i>' + '&nbsp;&nbsp;' + grades[i]+ '<\p>';
     }
     return div;
 
