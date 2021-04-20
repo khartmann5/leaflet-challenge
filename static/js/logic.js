@@ -129,7 +129,7 @@ function createMap(faultline, mags) {
 
     for (var i = 0; i < grades.length; i++){
       div.innerHTML +=
-      '<i style="background:' + color[i] + ' "></i>' + '&nbsp;&nbsp;' + grades[i]+ '<br>';
+      '<i style="background:' + color[i] + ' ">' + '&nbsp;&nbsp;' + grades[i]+ '</i><br>';
     }
     return div;
 
