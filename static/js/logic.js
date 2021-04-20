@@ -78,7 +78,7 @@ function createMap(mags) {
   d3.json(faultlineurl, function(plates){
     L.geoJSON(plates, {
       style: function() {
-        return {color:"orange"}
+        return {color:"yellow"}
       }
     }).addTo(faultline)
   })
@@ -91,7 +91,8 @@ function createMap(mags) {
 
   // Create overlay object to hold our overlay layer
   const overlayMaps = {
-    Magnitudes: mags
+    "Tectonic Plates": faultline,
+    "Earthquakes": mags
   };
 
   // Create our map, giving it the streetmap and earthquakes layers to display on load
@@ -100,7 +101,7 @@ function createMap(mags) {
       37.09, -95.71
     ],
     zoom: 3,
-    layers: [lightmap, mags]
+    layers: [lightmap, faultline, mags]
   });
 
   // create a legend in the bottom right corner
