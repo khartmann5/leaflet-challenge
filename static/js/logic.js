@@ -49,12 +49,27 @@ function createFeatures(earthquakeData) {
     }
   });
 
+  // Tectonic plates overlayMap
+  var faultline = new L.layerGroup();
+
+  var faultlineurl = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json";
+
+  d3.json(faultlineurl, function(plates){
+    L.geoJSON(plates, {
+      style: function() {
+        return {color:"orange"}
+      }
+    }).addTo(faultline)
+    // faultline.addTo(myMap);
+  })
+
   // Sending our earthquakes layer to the createMap function
-  createMap(mags);
+  createMap(faultline, mags);
 }
 
+
 // function createMap(earthquakes, mags) {
-function createMap(mags) {  
+function createMap(faultline, mags) {  
 
   const lightmap = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
     attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
@@ -77,19 +92,7 @@ function createMap(mags) {
     accessToken: API_KEY
   });
 
-  // Tectonic plates overlayMap
-  var faultline = L.layerGroup();
-
-  var faultlineurl = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json";
-
-  d3.json(faultlineurl, function(plates){
-    L.geoJSON(plates, {
-      style: function() {
-        return {color:"orange",weight: 2}
-      }
-    }).addTo(faultline)
-    faultline.addTo(myMap);
-  })
+  
 
   // Define a baseMaps object to hold our base layers
   const baseMaps = {
