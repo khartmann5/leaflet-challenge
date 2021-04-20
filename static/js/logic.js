@@ -70,6 +70,19 @@ function createMap(mags) {
     accessToken: API_KEY
   });
 
+  // Tectonic plates overlayMap
+  var faultline = L.layerGroup();
+
+  var faultlineurl = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json";
+
+  d3.json(faultlineurl, function(plates){
+    L.geoJSON(plates, {
+      style: function() {
+        return {color:"orange"}
+      }
+    }).addTo(faultline)
+  })
+
   // Define a baseMaps object to hold our base layers
   const baseMaps = {
     "Light Map": lightmap,
