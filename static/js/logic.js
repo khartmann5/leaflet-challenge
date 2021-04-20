@@ -76,10 +76,13 @@ function createMap(mags) {
   var faultlineurl = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json";
 
   d3.json(faultlineurl, function(plates){
-    L.geoJSON(plates, {color:"orange",weight: 2})
-    .addTo(faultline);
+    L.geoJSON(plates, {
+      style: function() {
+        return {color:"orange",weight: 2}
+      }
+    }).addTo(faultline)
     faultline.addTo(myMap);
-  });
+  })
 
   // Define a baseMaps object to hold our base layers
   const baseMaps = {
@@ -115,7 +118,7 @@ function createMap(mags) {
 
     for (var i = 0; i < grades.length; i++){
       div.innerHTML +=
-      '<i style="background:' + chooseColor(grades[i] +1) + ' "></i>' + '&nbsp;&nbsp;' + grades[i]+ '<br>';
+      '<i style="background:' + color[i] + ' "></i>' + '&nbsp;&nbsp;' + grades[i]+ '<br>';
     }
     return div;
 
