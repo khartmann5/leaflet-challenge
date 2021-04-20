@@ -1,5 +1,5 @@
 // Store API query variables
-const baseURL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
+const baseURL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson";
 
 // Grab the data with d3
 d3.json(baseURL).then(data => {
@@ -17,7 +17,7 @@ function chooseColor(depth){
     case depth < 50: return "#ffbf00";
     case depth < 70: return "#fda50f";
     case depth < 90: return "#d21f3c";
-    case depth > 91: return "#800000";
+    case depth > 90: return "#800000";
   };
 }
 
@@ -70,6 +70,13 @@ function createMap(mags) {
     accessToken: API_KEY
   });
 
+  const satellite = L.tileLayer("https://api.mapbox.com/styles/v1/mapbox/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}", {
+    attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
+    maxZoom: 18,
+    id: "satellite-v9",
+    accessToken: API_KEY
+  });
+
   // Tectonic plates overlayMap
   var faultline = L.layerGroup();
 
@@ -87,7 +94,8 @@ function createMap(mags) {
   // Define a baseMaps object to hold our base layers
   const baseMaps = {
     "Light Map": lightmap,
-    "Dark Map": darkmap
+    "Dark Map": darkmap,
+    "Satellite": satellite
   };
 
   // Create overlay object to hold our overlay layer
@@ -101,7 +109,7 @@ function createMap(mags) {
     center: [
       37.09, -95.71
     ],
-    zoom: 3,
+    zoom: 2.5,
     layers: [lightmap, faultline, mags]
   });
 
