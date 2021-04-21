@@ -10,14 +10,15 @@ d3.json(baseURL).then(data => {
   createFeatures(data.features);
 });
 
+// create a function to choose a different color based on depth of earthquake
 function chooseColor(depth){
   switch (true){
     case depth < 10: return "#c7ea46";
     case depth < 30: return "#fce205";
     case depth < 50: return "#ffbf00";
     case depth < 70: return "#fda50f";
-    case depth < 90: return "#d21f3c";
-    case depth > 90: return "#800000";
+    case depth < 90: return "#f64a8a";
+    case depth > 90: return "#b90f0a";
   };
 }
 
@@ -121,7 +122,7 @@ function createMap(faultline, mags) {
     layers: [lightmap, faultline, mags]
   });
 
-  // create a legend in the bottom right corner
+  // create a legend in the bottom right corner (with the help of my tutor David Pecot)
   var legend = L.control({
     position: 'bottomright',
     fillColor: 'white'
@@ -129,12 +130,14 @@ function createMap(faultline, mags) {
 
   legend.onAdd = function(){
     var div = L.DomUtil.create("div", "info legend");
-    var grades = ['<10','11-30','31-50','51-70','71-90','91+'];
-    var color = ['#c7ea46','#fce205','#ffbf00','#fda50f','#d21f3c','#800000'];
+    var grades = [-10,10,30,50,70,90];
+    var color = ['#c7ea46','#fce205','#ffbf00','#fda50f','#f64a8a','#b90f0a'];
 
+    div.innerHTML += "<div style='font-weight: 600; text-align:center;'>Depth</div>";
     for (var i = 0; i < grades.length; i++){
       div.innerHTML +=
-      '<i style="background:' + color[i] + ' ">' + '&nbsp;&nbsp;' + grades[i]+ '</i><br>';
+      "<div style='background: " + color[i] + "; text-align: center; padding: 1; border: 1px solid grey; min-width: 80px;'>"
+      + grades[i] + (grades[i + 1] ? "&ndash;" + grades[i + 1] + "</div>" : "+</div>");
     }
     return div;
 
