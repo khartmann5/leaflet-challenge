@@ -4,7 +4,7 @@ const baseURL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_w
 // Grab the data with d3
 d3.json(baseURL).then(data => {
 
-  // console.log(data);
+  console.log(data);
   // console.log(d3.extent(data.features.map(d => d.geometry.coordinates)))
   // Once we get a response, send the data.features object to the createFeatures function
   createFeatures(data.features);
