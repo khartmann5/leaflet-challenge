@@ -4,7 +4,7 @@ const baseURL = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_w
 // Grab the data with d3
 d3.json(baseURL).then(data => {
 
-  console.log(data);
+  // console.log(data);
   // console.log(d3.extent(data.features.map(d => d.geometry.coordinates)))
   // Once we get a response, send the data.features object to the createFeatures function
   createFeatures(data.features);
@@ -54,16 +54,21 @@ function createFeatures(earthquakeData) {
 
   var faultlineurl = "https://raw.githubusercontent.com/fraxen/tectonicplates/master/GeoJSON/PB2002_boundaries.json";
 
-  d3.json(faultlineurl, function(plates){
-    L.geoJSON(plates, {
-      style: function() {
-        return {color:"orange"}
-      }
-    }).addTo(faultline)
-    // faultline.addTo(myMap);
-  })
+  d3.json(faultlineurl).then(tectonic_data => {
+
+    console.log(tectonic_data)});
+
+    d3.json(faultlineurl).then( data => {
+      L.geoJSON(data, {
+        style: {color: "orange"}
+      }).addTo(faultline)
+    })
+    .catch(function (e) {
+      console.log(e);
+    });
 
   // Sending our earthquakes layer to the createMap function
+  // createMap(faultline, mags);
   createMap(faultline, mags);
 }
 
@@ -104,7 +109,7 @@ function createMap(faultline, mags) {
   // Create overlay object to hold our overlay layer
   const overlayMaps = {
     "Tectonic Plates": faultline,
-    Earthquakes: mags
+    "Earthquakes": mags
   };
 
   // Create our map, giving it the streetmap and earthquakes layers to display on load
